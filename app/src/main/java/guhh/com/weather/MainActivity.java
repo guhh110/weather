@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initView(){
         fragments = new ArrayList<>();
-        fragments.add(new WeatherFragment());
+        fragments.add(new WeatherFragment("龙岗"));
         pagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {

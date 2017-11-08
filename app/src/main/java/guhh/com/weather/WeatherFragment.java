@@ -1,7 +1,10 @@
 package guhh.com.weather;
 
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.PathEffect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,9 +22,13 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import entity.Hourly_forecast;
 import entity.WeatherEntity;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -30,6 +38,7 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -37,13 +46,16 @@ import lecho.lib.hellocharts.view.LineChartView;
  */
 
 public class WeatherFragment extends Fragment {
+    private String city;
+
     private View view;
-    private List<PointValue> mPointerTempera = new ArrayList<>();
-    private List<PointValue> mPointerHUM = new ArrayList<>();
-    private List<AxisValue> mAxisValues = new ArrayList<>();
     private  LineChartData lineChartData;
-    private Line line_Tempera;
-    private Line line_HUM;
+
+    private WeatherFragment(){}
+
+    public WeatherFragment(String city){
+        this.city = city;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,18 +66,16 @@ public class WeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         if(view == null){
-            refreshWeather();
             view = inflater.inflate(R.layout.fragment,null);
             initView(view);
             initLineChartView();
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                prepareDataAnimation();
-//                lineChartView.startDataAnimation();
-//            }
-//        },3000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshWeather();
+            }
+        },2000);
         }
         return view;
     }
@@ -74,77 +84,34 @@ public class WeatherFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.i("sssddd","onDestroyView");
-        mPointerHUM.clear();
-        mPointerTempera.clear();
 //        lineChartView.destroyDrawingCache();
 //        lineChartData.finish();
 //        lineChartData.getLines().clear();
     }
 
     private void initLineChartView(){
-        String[] strX = new String[]{"01:00","04:00","07:00","10:00","13:00","16:00","19:00","21:00","24:00"};
-        int[] valueYTempera = new int[]{13,31,56,43,98,65,32,74,69};
-        int[] valueYHUM = new int[]{85,90,70,75,85,80,87,90,89,87};
+        String[] strX = new String[]{"00:00","03:00","06:00","09:00","12:00","15:00","18:00","21:00","24:00"};
+        int[] valueTemperaAll = new int[]{0,0,0,0,0,0,0,0};
 
-        for(int i = 0;i<strX.length;i++){
-            mAxisValues.add(new AxisValue(i).setLabel(strX[i]));
-        }
+//        Line line_TemperaAll = createLine(new int[]{},Color.parseColor("#FFCD41"));
+        Line line_TemperaAll = createLine(valueTemperaAll,Color.parseColor("#FFCD41"));
 
-        for(int i=0;i<valueYTempera.length;i++){
-            mPointerTempera.add(new PointValue(i,valueYTempera[i]));
-        }
+        line_TemperaAll.setHasPoints(true);
+        Line line_TemperaToday = createLine(new int[]{0},Color.parseColor("#FFCD41"));
+        line_TemperaToday.setHasPoints(true);
 
-        for(int i=0;i<valueYHUM.length;i++){
-            mPointerHUM.add(new PointValue(i,valueYHUM[i]));
-        }
+        Axis axisX = createX(strX);
+        Axis axisY = new Axis();
 
+        PathEffect effects = new DashPathEffect(new float[] { 1, 2, 4, 8}, 1);
+        line_TemperaAll.setPathEffect(effects);
+        List<Line> lines = new ArrayList<>();
+        lines.add(line_TemperaAll);
+        lines.add(line_TemperaToday);
 
         lineChartData = new LineChartData();
-
-        line_Tempera = new Line(mPointerTempera).setColor(Color.parseColor("#FFCD41"));
-        line_Tempera.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
-        line_Tempera.setCubic(false);//曲线是否平滑，即是曲线还是折线
-        line_Tempera.setFilled(false);//是否填充曲线的面积
-        line_Tempera.setHasLabels(false);//曲线的数据坐标是否加上备注
-        line_Tempera.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
-        line_Tempera.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
-        line_Tempera.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
-        line_Tempera.setStrokeWidth(2);
-
-        line_HUM = new Line(mPointerHUM).setColor(Color.parseColor("#37aae4"));
-        line_HUM.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
-        line_HUM.setCubic(false);//曲线是否平滑，即是曲线还是折线
-        line_HUM.setFilled(false);//是否填充曲线的面积
-        line_HUM.setHasLabels(false);//曲线的数据坐标是否加上备注
-        line_HUM.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
-        line_HUM.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
-        line_HUM.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
-        line_HUM.setStrokeWidth(2);
-
-        //坐标轴
-        Axis axisX = new Axis(); //X轴
-        axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
-        axisX.setTextColor(Color.WHITE);  //设置字体颜色
-        //axisX.setName("date");  //表格名称
-        axisX.setTextSize(12);//设置字体大小
-        axisX.setMaxLabelChars(8); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
-        axisX.setValues(mAxisValues);  //填充X轴的坐标名称
-        lineChartData.setAxisXBottom(axisX); //x 轴在底部
-        //data.setAxisXTop(axisX);  //x 轴在顶部
-        axisX.setHasLines(true); //x 轴分割线
-
-        // Y轴是根据数据的大小自动设置Y轴上限(在下面我会给出固定Y轴数据个数的解决方案)
-        Axis axisY = new Axis();  //Y轴
-        axisY.setName("");//y轴标注
-        axisY.setTextSize(10);//设置字体大小
         lineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
-        //data.setAxisYRight(axisY);  //y轴设置在右边
-
-
-        List<Line> lines = new ArrayList<>();
-        lines.add(line_Tempera);
-        lines.add(line_HUM);
-
+        lineChartData.setAxisXBottom(axisX); //x 轴在底部
         lineChartData.setValueLabelBackgroundAuto(true);
         lineChartData.setLines(lines);
 
@@ -156,11 +123,76 @@ public class WeatherFragment extends Fragment {
         lineChartView.setVisibility(View.VISIBLE);
         lineChartView.startDataAnimation();
         lineChartView.setLineChartData(lineChartData);
+        lineChartView.setViewportCalculationEnabled(false);
+        Viewport v = new Viewport(lineChartView.getMaximumViewport());
+        v.bottom = -40;
+        v.top = 100;
+//        v.left = 0;
+//        v.right = 9 - 1;
+        lineChartView.setMaximumViewport(v);
+        lineChartView.setCurrentViewport(v);
 
     }
 
+    private Axis createX(String[] labels){
+        ArrayList mAxisValues = new ArrayList();
+        for(int i = 0;i<labels.length;i++){
+            mAxisValues.add(new AxisValue(i).setLabel(labels[i]));
+        }
+
+        //坐标轴
+        Axis axisX = new Axis(); //X轴
+        axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
+        axisX.setTextColor(Color.WHITE);  //设置字体颜色
+        //axisX.setName("date");  //表格名称
+        axisX.setTextSize(12);//设置字体大小
+//        axisX.setMaxLabelChars(3); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
+        axisX.setValues(mAxisValues);  //填充X轴的坐标名称
+        axisX.setHasLines(true); //x 轴分割线
+
+        return axisX;
+    }
+
+    private Axis createX(ArrayList<String> labels){
+        ArrayList mAxisValues = new ArrayList();
+        for(int i = 0;i<labels.size();i++){
+            mAxisValues.add(new AxisValue(i).setLabel(labels.get(i)));
+        }
+
+        //坐标轴
+        Axis axisX = new Axis(); //X轴
+        axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
+        axisX.setTextColor(Color.WHITE);  //设置字体颜色
+        //axisX.setName("date");  //表格名称
+        axisX.setTextSize(12);//设置字体大小
+//        axisX.setMaxLabelChars(3); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
+        axisX.setValues(mAxisValues);  //填充X轴的坐标名称
+        axisX.setHasLines(true); //x 轴分割线
+
+        return axisX;
+    }
+
+    private Line createLine(int[] data,int color){
+
+        ArrayList<PointValue> pointValues = new ArrayList<>();
+        for(int i=0;i<data.length;i++){
+            pointValues.add(new PointValue(i,data[i]));
+        }
+        Line line = new Line(pointValues).setColor(color);
+        line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
+        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
+        line.setFilled(false);//是否填充曲线的面积
+        line.setHasLabels(false);//曲线的数据坐标是否加上备注
+        line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
+        line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
+        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
+        line.setStrokeWidth(2);
+        return line;
+    }
+
+
     private RecyclerView dayWeatherRv;
-    private LineChartView lineChartView;
+        private LineChartView lineChartView;
     private ArrayList<WeatherEntity> dayWeathers;
     private MyAdapter myAdapter;
     private void initView(View view){
@@ -177,30 +209,77 @@ public class WeatherFragment extends Fragment {
         myAdapter.notifyDataSetChanged();
     }
 
-    private void prepareDataAnimation() {
+    private void prepareDataAnimation(WeatherEntity weatherEntity) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+        String nowDate = sdf.format(new Date());
+
         if(lineChartData == null)
             return;
-        Line line = lineChartData.getLines().get(0);
-        for (PointValue value : line.getValues()) {
-            // Here I modify target only for Y values but it is OK to modify X targets as well.
-            value.setTarget(value.getX(), (float) Math.random() * 100);
+        Line lineTmpAll = lineChartData.getLines().get(0);
+        Line lineTmpToday = lineChartData.getLines().get(1);
+        ArrayList<String> xLabel = new ArrayList<>();
+        List<PointValue> pointValuesTmpAll = lineTmpAll.getValues();
+        List<PointValue> pointValuesTmpToday = lineTmpToday.getValues();
+        List<Hourly_forecast> hourly_forecasts = weatherEntity.getResult().getHeWeather5().get(0).getHourly_forecast();
+        int index = 0;
+        for (int i = 0 ;i<hourly_forecasts.size() && index < 8;i+=3) {
+            Hourly_forecast hourly_forecast = hourly_forecasts.get(i);
+            String date = hourly_forecast.getDate();
+            float tmp = Float.parseFloat(hourly_forecast.getTmp());
+            if(date.contains(nowDate)){
+                Log.i("sssddd-if",tmp+"--"+index);
+                if(pointValuesTmpToday.size()>index){
+                    PointValue pointValue = pointValuesTmpToday.get(index);
+                    pointValue.setTarget(pointValue.getX(),tmp );
+                }else{
+                    pointValuesTmpToday.add(new PointValue(index,tmp));
+                }
+            }
+            PointValue pointValue = pointValuesTmpAll.get(index);
+            pointValue.setTarget(pointValue.getX(),tmp );
+            xLabel.add(index,date);
+            index++;
         }
+//        for (int i = 0 ;i<todayTmp.size();i++) {
+//            try {
+//                PointValue value = pointValuesTmpToday.get(i);
+//                value.setTarget(value.getX(), Float.parseFloat(todayTmp.get(i)));
+//            }catch (IndexOutOfBoundsException e){
+//                pointValuesTmpToday.add(i,);
+//            }
+//
+//        }
+        Viewport v = new Viewport(lineChartView.getMaximumViewport());
+        v.bottom = 0;
+        v.top = 40;
+//        v.left = 0;
+//        v.right = 9 - 1;
+        lineChartView.setMaximumViewport(v);
+        lineChartView.setCurrentViewport(v);
+
+        Axis axis = createX(xLabel);
+        lineChartData.setAxisXBottom(axis);
     }
 
     private void refreshWeather(){
-        String url = "https://way.jd.com/he/full_weather?city=beijing&lang=en&appkey="+UserData.apkKey;
+//        String url = "https://way.jd.com/he/full_weather?city=beijing&lang=en&appkey="+UserData.apkKey;
+        String url = "http://192.168.15.188:8080/ImagePage/weather";
         OkGo.<String>get(url).tag(this).execute(new StringCallback(){
 
             @Override
             public void onSuccess(Response<String> response) {
+                //lineChartData.setAxisXBottom(createX(new String[]{"明天 01时","，明天 00:00"}));
                 WeatherEntity weatherEntity = JSON.parseObject(response.body(),WeatherEntity.class);
-
+//                HashMap<String,ArrayList<String>> data = Util.getLineData(weatherEntity);
+                prepareDataAnimation(weatherEntity);
+                lineChartView.startDataAnimation();
                 Log.i("sssddd",response.body());
             }
 
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
+                Toast.makeText(getContext(),"网咯请求失败！",Toast.LENGTH_SHORT).show();
             }
         });
     }
