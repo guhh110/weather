@@ -95,19 +95,12 @@ public class WeatherFragment extends Fragment {
 
 //        Line line_TemperaAll = createLine(new int[]{},Color.parseColor("#FFCD41"));
         Line line_TemperaAll = createLine(valueTemperaAll,Color.parseColor("#FFCD41"));
-
         line_TemperaAll.setHasPoints(true);
-        Line line_TemperaToday = createLine(new int[]{0},Color.parseColor("#FFCD41"));
-        line_TemperaToday.setHasPoints(true);
-
         Axis axisX = createX(strX);
         Axis axisY = new Axis();
 
-        PathEffect effects = new DashPathEffect(new float[] { 1, 2, 4, 8}, 1);
-        line_TemperaAll.setPathEffect(effects);
         List<Line> lines = new ArrayList<>();
         lines.add(line_TemperaAll);
-        lines.add(line_TemperaToday);
 
         lineChartData = new LineChartData();
         lineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
@@ -216,42 +209,38 @@ public class WeatherFragment extends Fragment {
         if(lineChartData == null)
             return;
         Line lineTmpAll = lineChartData.getLines().get(0);
-        Line lineTmpToday = lineChartData.getLines().get(1);
         ArrayList<String> xLabel = new ArrayList<>();
         List<PointValue> pointValuesTmpAll = lineTmpAll.getValues();
-        List<PointValue> pointValuesTmpToday = lineTmpToday.getValues();
         List<Hourly_forecast> hourly_forecasts = weatherEntity.getResult().getHeWeather5().get(0).getHourly_forecast();
+        int re = 0;
         int index = 0;
+        float maxTmp = -99;
+        float minTmp = 99;
         for (int i = 0 ;i<hourly_forecasts.size() && index < 8;i+=3) {
             Hourly_forecast hourly_forecast = hourly_forecasts.get(i);
             String date = hourly_forecast.getDate();
             float tmp = Float.parseFloat(hourly_forecast.getTmp());
-            if(date.contains(nowDate)){
-                Log.i("sssddd-if",tmp+"--"+index);
-                if(pointValuesTmpToday.size()>index){
-                    PointValue pointValue = pointValuesTmpToday.get(index);
-                    pointValue.setTarget(pointValue.getX(),tmp );
-                }else{
-                    pointValuesTmpToday.add(new PointValue(index,tmp));
-                }
+            if(!date.contains(nowDate) && re == 0){
+                re =1;
+                lineTmpAll.spIndex = index;
             }
+
+            if(tmp>maxTmp)
+                maxTmp = tmp;
+
+            if(tmp<minTmp)
+                minTmp = tmp;
+
+
             PointValue pointValue = pointValuesTmpAll.get(index);
             pointValue.setTarget(pointValue.getX(),tmp );
-            xLabel.add(index,date);
+            xLabel.add(index,date.split(" ")[1]);
             index++;
         }
-//        for (int i = 0 ;i<todayTmp.size();i++) {
-//            try {
-//                PointValue value = pointValuesTmpToday.get(i);
-//                value.setTarget(value.getX(), Float.parseFloat(todayTmp.get(i)));
-//            }catch (IndexOutOfBoundsException e){
-//                pointValuesTmpToday.add(i,);
-//            }
-//
-//        }
+        Log.i("sssddd",maxTmp+"-"+minTmp);
         Viewport v = new Viewport(lineChartView.getMaximumViewport());
-        v.bottom = 0;
-        v.top = 40;
+        v.bottom = minTmp-5;
+        v.top = maxTmp+5;
 //        v.left = 0;
 //        v.right = 9 - 1;
         lineChartView.setMaximumViewport(v);
