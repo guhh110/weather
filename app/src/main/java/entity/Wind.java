@@ -2,10 +2,9 @@
   * Copyright 2017 bejson.com 
   */
 package entity;
-import java.util.Date;
 
 /**
- * Auto-generated: 2017-11-08 0:2:24
+ * Auto-generated: 2017-11-09 15:41:2
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
@@ -16,14 +15,12 @@ public class Wind {
     private String spd;
     private String deg;
     private String dir;
-
-    public String getSc() {
-        return sc;
-    }
-
     public void setSc(String sc) {
-        this.sc = sc;
-    }
+         this.sc = sc;
+     }
+     public String getSc() {
+         return sc;
+     }
 
     public void setSpd(String spd) {
          this.spd = spd;

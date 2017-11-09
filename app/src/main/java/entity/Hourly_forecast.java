@@ -4,7 +4,7 @@
 package entity;
 
 /**
- * Auto-generated: 2017-11-08 0:2:24
+ * Auto-generated: 2017-11-09 15:41:2
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
