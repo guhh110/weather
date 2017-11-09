@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lzy.okgo.OkGo;
@@ -257,12 +258,18 @@ public class WeatherFragment extends Fragment {
 
             @Override
             public void onSuccess(Response<String> response) {
-                //lineChartData.setAxisXBottom(createX(new String[]{"明天 01时","，明天 00:00"}));
-                WeatherEntity weatherEntity = JSON.parseObject(response.body(),WeatherEntity.class);
-//                HashMap<String,ArrayList<String>> data = Util.getLineData(weatherEntity);
-                prepareDataAnimation(weatherEntity);
-                lineChartView.startDataAnimation();
-                Log.i("sssddd",response.body());
+                try {
+                    WeatherEntity weatherEntity = JSON.parseObject(response.body(),WeatherEntity.class);
+                    if(weatherEntity == null){
+                        Toast.makeText(getContext(),"获取天气失败！",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    prepareDataAnimation(weatherEntity);
+                    lineChartView.startDataAnimation();
+                    Log.i("sssddd",response.body());
+                }catch (JSONException e){
+                    Toast.makeText(getContext(),"解析数据出错！",Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
