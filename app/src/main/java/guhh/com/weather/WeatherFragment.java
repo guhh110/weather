@@ -2,6 +2,7 @@ package guhh.com.weather;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,14 +40,15 @@ import lecho.lib.hellocharts.view.LineChartView;
  */
 
 public class WeatherFragment extends Fragment {
+    private Handler handler;
     private String city;
     private View view;
-    private LineChartHelper lineChartHelper;
 
     private WeatherFragment(){}
 
-    public WeatherFragment(String city){
+    public WeatherFragment(String city,Handler handler){
         this.city = city;
+        this.handler = handler;
     }
 
     @Override
@@ -60,7 +62,6 @@ public class WeatherFragment extends Fragment {
         if(view == null){
             view = inflater.inflate(R.layout.fragment,null);
             initView(view);
-            lineChartHelper = new LineChartHelper(lineChartView);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -92,33 +93,12 @@ public class WeatherFragment extends Fragment {
                         return;
                     }
                     HeWeather5 heWeather5 = weatherEntity.getResult().getHeWeather5().get(0);
-                    //改变折线图
-                    List<Hourly_forecast>  hourly_forecasts = heWeather5.getHourly_forecast();
-                    lineChartHelper.changeLineChartDataValue(hourly_forecasts);
-
-                    //设置顶部面板数据
                     String city = heWeather5.getBasic().getCity();
-                    Now now = heWeather5.getNow();
-                    String tmp = now.getTmp();
-                    String hum = now.getHum();
-                    String fl = now.getFl();
-                    String wind = now.getWind().getDir()+"  "+now.getWind().getDeg()+"°  "+now.getWind().getSc()+"  "+now.getWind().getSpd()+"km/h";
-                    String weather = now.getCond().getTxt();
-                    String weatherCode = now.getCond().getCode();
-                    String pm25 = heWeather5.getAqi().getCity().getPm25();
-                    location_tv.setText(city);
-                    tmp_tv.setText(tmp);
-                    hum_tv.setText(hum);
-                    fl_tv.setText(fl);
-                    wind_tv.setText(wind);
-                    weather_tv.setText(weather);
-                    pm25_tv.setText(pm25);
-                    setWeatherIcon(weather_iv,weatherCode);
-
-
-//                    prepareDataAnimation(weatherEntity);
-                    lineChartView.startDataAnimation();
-                    Log.i("sssddd",response.body());
+//                    location_tv.setText(city);
+                    Message message = new Message();
+                    message.obj = weatherEntity;
+                    message.what = MainActivity.GET_WEATHER_DONE;
+                    handler.sendMessage(message);
                 }catch (JSONException e){
                     Toast.makeText(getContext(),"解析数据出错！",Toast.LENGTH_SHORT).show();
                 }
@@ -387,28 +367,19 @@ public class WeatherFragment extends Fragment {
         }
     }
     private RecyclerView dayWeatherRv;
-    private LineChartView lineChartView;
     private ArrayList<WeatherEntity> dayWeathers;
     private MyAdapter myAdapter;
     private TextView location_tv;
 
-    private TextView weather_tv;
-    private TextView wind_tv;
-    private TextView tmp_tv;
-    private TextView hum_tv;
-    private TextView fl_tv;
-    private TextView pm25_tv;
-    private ImageView weather_iv;
-
     private void initView(View view){
-        weather_iv = (ImageView) view.findViewById(R.id.weather_iv);
-        weather_tv = (TextView) view.findViewById(R.id.weather_tv);
-        wind_tv = (TextView) view.findViewById(R.id.wind_tv);
-        tmp_tv = (TextView) view.findViewById(R.id.temperature_tv);
-        hum_tv = (TextView) view.findViewById(R.id.hum_tv);
-        fl_tv = (TextView) view.findViewById(R.id.fl_tv);
-        pm25_tv = (TextView) view.findViewById(R.id.pm25_tv);
-
+//        weather_iv = (ImageView) view.findViewById(R.id.weather_iv);
+//        weather_tv = (TextView) view.findViewById(R.id.weather_tv);
+//        wind_tv = (TextView) view.findViewById(R.id.wind_tv);
+//        tmp_tv = (TextView) view.findViewById(R.id.temperature_tv);
+//        hum_tv = (TextView) view.findViewById(R.id.hum_tv);
+//        fl_tv = (TextView) view.findViewById(R.id.fl_tv);
+//        pm25_tv = (TextView) view.findViewById(R.id.pm25_tv);
+//
         location_tv = (TextView) view.findViewById(R.id.location_tv);
         dayWeatherRv = (RecyclerView) view.findViewById(R.id.dayWeather_rv);
         dayWeathers = new ArrayList<>();
@@ -420,9 +391,6 @@ public class WeatherFragment extends Fragment {
         dayWeatherRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         dayWeatherRv.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
-
-        //折线图
-        lineChartView = (LineChartView) view.findViewById(R.id.line_chart);
 
     }
     class MyAdapter extends BaseQuickAdapter<WeatherEntity,BaseViewHolder> {
