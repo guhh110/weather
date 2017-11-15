@@ -104,12 +104,12 @@
         "source": "C:\\Users\\sunpn\\.android\\build-cache\\45dd921932458e89809af7db6883eb398bf718aa\\output\\res\\drawable-xxhdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png"
     },
     {
-        "merged": "D:\\Android\\Git_All\\project\\weather\\hellocharts-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png",
-        "source": "C:\\Users\\sunpn\\.android\\build-cache\\45dd921932458e89809af7db6883eb398bf718aa\\output\\res\\drawable-xxhdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png"
-    },
-    {
         "merged": "D:\\Android\\Git_All\\project\\weather\\hellocharts-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\abc_list_longpressed_holo.9.png",
         "source": "C:\\Users\\sunpn\\.android\\build-cache\\45dd921932458e89809af7db6883eb398bf718aa\\output\\res\\drawable-xxhdpi-v4\\abc_list_longpressed_holo.9.png"
+    },
+    {
+        "merged": "D:\\Android\\Git_All\\project\\weather\\hellocharts-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "C:\\Users\\sunpn\\.android\\build-cache\\45dd921932458e89809af7db6883eb398bf718aa\\output\\res\\drawable-xxhdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
         "merged": "D:\\Android\\Git_All\\project\\weather\\hellocharts-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_light.9.png",

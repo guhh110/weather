@@ -27,8 +27,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import entity.Daily_forecast;
 import entity.HeWeather5;
 import entity.Hourly_forecast;
 import entity.Now;
@@ -62,13 +64,7 @@ public class WeatherFragment extends Fragment {
         if(view == null){
             view = inflater.inflate(R.layout.fragment,null);
             initView(view);
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshWeather();
-                }
-            },2000);
+            refreshWeather();
         }
         return view;
     }
@@ -86,6 +82,7 @@ public class WeatherFragment extends Fragment {
 
             @Override
             public void onSuccess(Response<String> response) {
+                Log.i("sssddd",response.body());
                 try {
                     WeatherEntity weatherEntity = JSON.parseObject(response.body(),WeatherEntity.class);
                     if(weatherEntity == null){
@@ -93,12 +90,15 @@ public class WeatherFragment extends Fragment {
                         return;
                     }
                     HeWeather5 heWeather5 = weatherEntity.getResult().getHeWeather5().get(0);
+                    dayWeathers = heWeather5.getDaily_forecast();
                     String city = heWeather5.getBasic().getCity();
-//                    location_tv.setText(city);
                     Message message = new Message();
                     message.obj = weatherEntity;
                     message.what = MainActivity.GET_WEATHER_DONE;
                     handler.sendMessage(message);
+
+                    HashMap<String,WeatherEntity> h = new HashMap<String, WeatherEntity>();
+                    UserData.weathers.put(city,weatherEntity);
                 }catch (JSONException e){
                     Toast.makeText(getContext(),"解析数据出错！",Toast.LENGTH_SHORT).show();
                 }
@@ -112,296 +112,33 @@ public class WeatherFragment extends Fragment {
         });
     }
 
-    private void setWeatherIcon(ImageView weather_iv, String weatherCodeStr) {
-        int weatherCodeInt = Integer.parseInt(weatherCodeStr);
-        boolean isDay = isDay();
-        Log.i("sssddd",isDay+"------");
-        switch (weatherCodeInt){
-            case 100:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.sunny);
-                else
-                    weather_iv.setImageResource(R.mipmap.sunny_night);
-                break;
-            case 101:
-                    weather_iv.setImageResource(R.mipmap.cloudy5);
-                break;
-            case 102:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.cloudy2);
-                else
-                    weather_iv.setImageResource(R.mipmap.cloudy2_night);
-                break;
-            case 103:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.cloudy1);
-                else
-                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-                break;
-            case 104:
-                    weather_iv.setImageResource(R.mipmap.overcast);
-                break;
-//            case 200:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 201:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 202:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 203:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 204:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 205:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 206:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.cloudy1);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.cloudy1_night);
-//                break;
-//            case 207:
-//
-//                break;
-//            case 208:
-//
-//                break;
-//            case 209:
-//
-//                break;
-//            case 210:
-//
-//                break;
-//            case 211:
-//
-//                break;
-//            case 212:
-//
-//                break;
-//            case 213:
-//
-//                break;
-            case 300:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.shower1);
-                else
-                    weather_iv.setImageResource(R.mipmap.shower1_night);
-                break;
-            case 301:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.shower2);
-                else
-                    weather_iv.setImageResource(R.mipmap.shower2_night);
-                break;
-            case 302:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.tstorm2);
-                else
-                    weather_iv.setImageResource(R.mipmap.tstorm2_night);
-                break;
-            case 303:
-                    weather_iv.setImageResource(R.mipmap.tstorm3);
-                break;
-            case 304:
-                    weather_iv.setImageResource(R.mipmap.hail);
-                break;
-            case 305:
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 306:
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 307:
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 308:
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 309:
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 310:
-                weather_iv.setImageResource(R.mipmap.shower3);
-                break;
-            case 311:
-                weather_iv.setImageResource(R.mipmap.shower3);
-                break;
-            case 312:
-                weather_iv.setImageResource(R.mipmap.shower3);
-                break;
-            case 313:
-                weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 400:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.snow1);
-                else
-                    weather_iv.setImageResource(R.mipmap.snow1_night);
-                break;
-            case 401:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.snow2);
-                else
-                    weather_iv.setImageResource(R.mipmap.snow2_night);
-                break;
-            case 402:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.snow3);
-                else
-                    weather_iv.setImageResource(R.mipmap.snow3_night);
-                break;
-            case 403:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.snow5);
-                else
-                    weather_iv.setImageResource(R.mipmap.light_rain);
-                break;
-            case 404:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.sleet);
-                break;
-            case 405:
-                    weather_iv.setImageResource(R.mipmap.sleet);
-                break;
-            case 406:
-                    weather_iv.setImageResource(R.mipmap.sleet);
-                break;
-            case 407:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.snow1);
-                else
-                    weather_iv.setImageResource(R.mipmap.snow1_night);
-                break;
-            case 500:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.mist);
-                else
-                    weather_iv.setImageResource(R.mipmap.mist_night);
-                break;
-            case 501:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.fog);
-                else
-                    weather_iv.setImageResource(R.mipmap.fog_night);
-                break;
-            case 502:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.fog);
-                else
-                    weather_iv.setImageResource(R.mipmap.fog_night);
-                break;
-            case 503:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.fog);
-                else
-                    weather_iv.setImageResource(R.mipmap.fog_night);
-                break;
-            case 504:
-                if(isDay)
-                    weather_iv.setImageResource(R.mipmap.mist);
-                else
-                    weather_iv.setImageResource(R.mipmap.mist_night);
-                break;
-            default:
-                weather_iv.setImageResource(0);
-                break;
-//            case 507:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                break;
-//            case 508:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                break;
-//            case 900:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                break;
-//            case 901:
-//                if(isDay)
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                else
-//                    weather_iv.setImageResource(R.mipmap.light_rain);
-//                break;
-//            case 999:
-        }
-    }
-
-    public boolean isDay(){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH");
-        String hour= sdf.format(new Date());
-        int k  = Integer.parseInt(hour)  ;
-        if ((k>=0 && k<6) ||(k >=18 && k<24)){
-            return true;
-        } else {
-            return false;
-        }
-    }
     private RecyclerView dayWeatherRv;
-    private ArrayList<WeatherEntity> dayWeathers;
+    private List<Daily_forecast> dayWeathers;
     private MyAdapter myAdapter;
-    private TextView location_tv;
 
     private void initView(View view){
-//        weather_iv = (ImageView) view.findViewById(R.id.weather_iv);
-//        weather_tv = (TextView) view.findViewById(R.id.weather_tv);
-//        wind_tv = (TextView) view.findViewById(R.id.wind_tv);
-//        tmp_tv = (TextView) view.findViewById(R.id.temperature_tv);
-//        hum_tv = (TextView) view.findViewById(R.id.hum_tv);
-//        fl_tv = (TextView) view.findViewById(R.id.fl_tv);
-//        pm25_tv = (TextView) view.findViewById(R.id.pm25_tv);
-//
-        location_tv = (TextView) view.findViewById(R.id.location_tv);
         dayWeatherRv = (RecyclerView) view.findViewById(R.id.dayWeather_rv);
         dayWeathers = new ArrayList<>();
-        dayWeathers.add(new WeatherEntity());
-        dayWeathers.add(new WeatherEntity());
-        dayWeathers.add(new WeatherEntity());
-
         myAdapter = new MyAdapter(R.layout.item_weather,dayWeathers);
         dayWeatherRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         dayWeatherRv.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
 
     }
-    class MyAdapter extends BaseQuickAdapter<WeatherEntity,BaseViewHolder> {
 
-        public MyAdapter(int layout,@Nullable List<WeatherEntity> data) {
+    class MyAdapter extends BaseQuickAdapter<Daily_forecast,BaseViewHolder> {
+
+        public MyAdapter(int layout,@Nullable List<Daily_forecast> data) {
             super(layout,data);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, WeatherEntity item) {
+        protected void convert(BaseViewHolder helper, Daily_forecast item) {
 
         }
+    }
+
+    public String getCity() {
+        return city;
     }
 }

@@ -28,8 +28,6 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class LineChartHelper {
     private LineChartView lineChartView;
     private LineChartData lineChartData;
-    private float max = -99;
-    private float min = 99;
 
     private LineChartHelper(){};
     public LineChartHelper(LineChartView lineChartView){
@@ -133,6 +131,8 @@ public class LineChartHelper {
     }
 
     public void changeLineChartDataValue(List<Hourly_forecast> hourly_forecasts) {
+        float max = -99;
+        float min = 99;
         SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
         String nowDate = sdf.format(new Date());
         Line line = lineChartData.getLines().get(0);
@@ -175,13 +175,5 @@ public class LineChartHelper {
 
         Axis axis = createX(xLabel);
         lineChartData.setAxisXBottom(axis);
-    }
-
-    public float getMax() {
-        return max;
-    }
-
-    public float getMin() {
-        return min;
     }
 }

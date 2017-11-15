@@ -13,12 +13,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
@@ -51,8 +58,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             WeatherEntity weatherEntity = (WeatherEntity) msg.obj;
             switch (what){
                 case GET_WEATHER_DONE:
-
-                    setDataInView(weatherEntity);
+                    String city = weatherEntity.getResult().getHeWeather5().get(0).getBasic().getCity();
+                    if(fragments.get(viewPager.getCurrentItem()).getCity().equals(city)){
+                        setDataInView(weatherEntity);
+                    }
                     break;
             }
         }
@@ -62,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,6 +87,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //begin------------------
         initView();
         lineChartHelper = new LineChartHelper(lineChartView);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                String city = fragments.get(position).getCity();
+                WeatherEntity weatherEntity = UserData.weathers.get(city);
+                if(weatherEntity!=null){
+                    setDataInView(weatherEntity);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -148,15 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    private TextView weather_tv;
-    private TextView wind_tv;
-    private TextView tmp_tv;
-    private TextView hum_tv;
-    private TextView fl_tv;
-    private TextView pm25_tv;
-    private ImageView weather_iv;
-    private LineChartView lineChartView;
-
     private void setDataInView(WeatherEntity weatherEntity) {
         HeWeather5 heWeather5 = weatherEntity.getResult().getHeWeather5().get(0);
         //改变折线图
@@ -166,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //设置顶部面板数据
 
         Now now = heWeather5.getNow();
+        String city = heWeather5.getBasic().getCity();
         String tmp = now.getTmp();
         String hum = now.getHum();
         String fl = now.getFl();
@@ -173,24 +194,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String weather = now.getCond().getTxt();
         String weatherCode = now.getCond().getCode();
         String pm25 = heWeather5.getAqi().getCity().getPm25();
-        tmp_tv.setText(tmp);
-        hum_tv.setText(hum);
-        fl_tv.setText(fl);
+        hum_tv.setText(hum+"%");
+        fl_tv.setText(fl+"℃");
         wind_tv.setText(wind);
         weather_tv.setText(weather);
         pm25_tv.setText(pm25);
+        toolbar.setTitle(city);
+        tmp_tv.setText(tmp);
         setWeatherIcon(weather_iv,weatherCode);
 
 
 //                    prepareDataAnimation(weatherEntity);
         lineChartView.startDataAnimation();
     }
-
+    private Toolbar toolbar;
+    private TextSwitcher weather_tv;
+    private TextSwitcher wind_tv;
+    private TextSwitcher tmp_tv;
+    private TextSwitcher hum_tv;
+    private TextSwitcher fl_tv;
+    private TextSwitcher pm25_tv;
+    private ImageSwitcher weather_iv;
+    private LineChartView lineChartView;
+    private TextView local_tv;
     private void initView(){
         fragments = new ArrayList<>();
         fragments.add(new WeatherFragment("龙岗",handler));
-        fragments.add(new WeatherFragment("龙岗",handler));
-        fragments.add(new WeatherFragment("龙岗",handler));
+        fragments.add(new WeatherFragment("盐田",handler));
+        fragments.add(new WeatherFragment("北京",handler));
         pagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -206,20 +237,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(pagerAdapter);
 
 
-        weather_iv = (ImageView) findViewById(R.id.weather_iv);
-        weather_tv = (TextView) findViewById(R.id.weather_tv);
-        wind_tv = (TextView) findViewById(R.id.wind_tv);
-        tmp_tv = (TextView) findViewById(R.id.temperature_tv);
-        hum_tv = (TextView) findViewById(R.id.hum_tv);
-        fl_tv = (TextView) findViewById(R.id.fl_tv);
-        pm25_tv = (TextView) findViewById(R.id.pm25_tv);
+        local_tv = (TextView) findViewById(R.id.location_tv);
+        weather_iv = (ImageSwitcher) findViewById(R.id.weather_iv);
+        weather_iv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.imageview,null);
+                return view;
+            }
+        });
+        weather_tv = (TextSwitcher) findViewById(R.id.weather_tv);
+        weather_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setText("多云");
+                view.setTextSize(18);
+                return view;
+            }
+        });
+        wind_tv = (TextSwitcher) findViewById(R.id.wind_tv);
+        wind_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                return view;
+            }
+        });
+        tmp_tv = (TextSwitcher) findViewById(R.id.temperature_tv);
+        tmp_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setText("0");
+                view.setTextSize(60);
+                return view;
+            }
+        });
+        hum_tv = (TextSwitcher) findViewById(R.id.hum_tv);
+        hum_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setText("0%");
+                return view;
+            }
+        });
+        fl_tv = (TextSwitcher) findViewById(R.id.fl_tv);
+        fl_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setText("0℃");
+                return view;
+            }
+        });
+        pm25_tv = (TextSwitcher) findViewById(R.id.pm25_tv);
+        pm25_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setText("0");
+                return view;
+            }
+        });
         //折线图
         lineChartView = (LineChartView) findViewById(R.id.line_chart);
 
     }
 
 
-    private void setWeatherIcon(ImageView weather_iv, String weatherCodeStr) {
+    private void setWeatherIcon(ImageSwitcher weather_iv, String weatherCodeStr) {
         int weatherCodeInt = Integer.parseInt(weatherCodeStr);
         boolean isDay = isDay();
         Log.i("sssddd",isDay+"------");
@@ -465,11 +553,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean isDay(){
         SimpleDateFormat sdf = new SimpleDateFormat("HH");
         String hour= sdf.format(new Date());
-        int k  = Integer.parseInt(hour)  ;
+        int k  = Integer.parseInt(hour);
         if ((k>=0 && k<6) ||(k >=18 && k<24)){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
