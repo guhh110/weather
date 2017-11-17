@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import entity.Hourly_forecast;
 import entity.Now;
 import entity.WeatherEntity;
 import lecho.lib.hellocharts.view.LineChartView;
+import seivice.Util;
 
 /**
  * Created by ggg on 2017/11/7.
@@ -90,7 +92,10 @@ public class WeatherFragment extends Fragment {
                         return;
                     }
                     HeWeather5 heWeather5 = weatherEntity.getResult().getHeWeather5().get(0);
-                    dayWeathers = heWeather5.getDaily_forecast();
+                    dayWeathers.addAll(heWeather5.getDaily_forecast());
+                    Toast.makeText(getContext(),dayWeathers.size()+"-",Toast.LENGTH_SHORT).show();
+                    myAdapter.notifyDataSetChanged();
+
                     String city = heWeather5.getBasic().getCity();
                     Message message = new Message();
                     message.obj = weatherEntity;
@@ -99,7 +104,9 @@ public class WeatherFragment extends Fragment {
 
                     HashMap<String,WeatherEntity> h = new HashMap<String, WeatherEntity>();
                     UserData.weathers.put(city,weatherEntity);
+
                 }catch (JSONException e){
+                    myAdapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.empty,null));
                     Toast.makeText(getContext(),"解析数据出错！",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -107,6 +114,7 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
+                myAdapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.empty,null));
                 Toast.makeText(getContext(),"网咯请求失败！",Toast.LENGTH_SHORT).show();
             }
         });
@@ -120,6 +128,9 @@ public class WeatherFragment extends Fragment {
         dayWeatherRv = (RecyclerView) view.findViewById(R.id.dayWeather_rv);
         dayWeathers = new ArrayList<>();
         myAdapter = new MyAdapter(R.layout.item_weather,dayWeathers);
+        myAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        myAdapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.loading,null));
+        myAdapter.isFirstOnly(false);
         dayWeatherRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         dayWeatherRv.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
@@ -134,7 +145,30 @@ public class WeatherFragment extends Fragment {
 
         @Override
         protected void convert(BaseViewHolder helper, Daily_forecast item) {
-
+            String minTmp = item.getTmp().getMin();
+            String maxTmp = item.getTmp().getMax();
+            String wind = item.getWind().getDir()+"   "+item.getWind().getDeg()+"°    级别："+item.getWind().getSc()+"    "+item.getWind().getSpd()+"km/h";
+            String hum = item.getHum();
+            String dayWeather = item.getCond().getTxt_d();
+            String dayCode = item.getCond().getCode_d();
+            String nightWeather = item.getCond().getTxt_n();
+            String nightCode = item.getCond().getCode_n();
+            String sunStartTime = item.getAstro().getSr();
+            String sunDownTime = item.getAstro().getSs();
+            String date = String.valueOf(item.getDate());
+            helper.setText(R.id.minTmp_tv,minTmp);
+            helper.setText(R.id.maxTmp_tv,maxTmp);
+            helper.setText(R.id.wind_tv,wind);
+            helper.setText(R.id.hum_tv,hum);
+            helper.setText(R.id.dayWeather_tv,dayWeather);
+            helper.setText(R.id.nightWeather_tv,nightWeather);
+            helper.setText(R.id.ss_tv,sunStartTime);
+            helper.setText(R.id.sd_tv,sunDownTime);
+            Util.setWeatherIcon((ImageView) helper.getView(R.id.dayIcon_iv),dayCode);
+            Util.setWeatherIcon((ImageView) helper.getView(R.id.nightIcon_iv),nightCode);
+            helper.setText(R.id.minTmp_tv,minTmp);
+            helper.setText(R.id.date_tv,date);
+            Log.i("sssddd",dayWeather+"---");
         }
     }
 

@@ -259,9 +259,9 @@
     <ImageView
         android:layout_below="@id/nowWeather_rl"
         android:background="@drawable/shadow"
-        android:alpha="0.5"
+        android:alpha="0.9"
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="5dp" />
     <android.support.v4.view.ViewPager
         android:layout_below="@id/nowWeather_rl"
         android:id="@+id/viewPage"

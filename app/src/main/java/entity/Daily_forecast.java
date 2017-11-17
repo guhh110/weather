@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Daily_forecast {
 
-    private Date date;
+    private String date;
     private String pop;
     private String hum;
     private String uv;
@@ -23,10 +23,10 @@ public class Daily_forecast {
     private Tmp tmp;
     private Cond cond;
     private Wind wind;
-    public void setDate(Date date) {
+    public void setDate(String date) {
          this.date = date;
      }
-     public Date getDate() {
+     public String getDate() {
          return date;
      }
 
