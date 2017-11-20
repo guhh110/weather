@@ -23,19 +23,28 @@
                 android:id="@+id/minTmp_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="13℃"
+                android:text="13"
                 android:textColor="#fff"
                 android:textSize="30sp" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:id="@+id/tv5"
+                android:layout_toRightOf="@id/minTmp_tv"
+                android:layout_alignBaseline="@id/minTmp_tv"
+                android:textColor="#fff"
+                android:text="℃"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/minTmp_tv"
+                android:layout_toRightOf="@id/tv5"
                 android:text="~"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/maxTmp_tv"
@@ -43,9 +52,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/tv2"
-                android:text="25℃"
+                android:text="20"
                 android:textColor="#fff"
                 android:textSize="30sp" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/maxTmp_tv"
+                android:layout_alignBaseline="@id/maxTmp_tv"
+                android:textColor="#fff"
+                android:text="℃"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <ImageView
                 android:id="@+id/iv3"
@@ -81,7 +98,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_below="@id/tv1"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:src="@mipmap/ss" />
 
             <TextView
@@ -89,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv1"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/iv1"
                 android:text="日出："
                 android:textColor="#fff" />
@@ -104,19 +121,21 @@
                 android:textColor="#fff" />
 
             <ImageView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/iv2"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_below="@id/tv3"
-                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/ss_tv"
+                android:layout_below="@id/tv1"
+                android:layout_marginTop="10dp"
                 android:src="@mipmap/sd1" />
 
             <TextView
                 android:id="@+id/tv4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv3"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/tv1"
+                android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/iv2"
                 android:text="日落："
                 android:textColor="#fff" />
@@ -134,7 +153,7 @@
                 android:id="@+id/iv4"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:src="@mipmap/wind" />
             <TextView
                 android:layout_toRightOf="@id/iv4"
@@ -142,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv4"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="无持续风向  微风  5km/h"
                 android:textColor="#fff" />
 
@@ -176,6 +195,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:id="@+id/night_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -214,7 +234,7 @@
                 android:text="2017-10-26"
                 android:textColor="#fff"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                 />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

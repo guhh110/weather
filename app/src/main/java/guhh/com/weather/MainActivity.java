@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ import seivice.Util;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public final static int GET_WEATHER_DONE = 1;
+
 
     private ViewPager viewPager;
     private ArrayList<WeatherFragment> fragments;
@@ -117,6 +120,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        nowWeatherRl.post(new Runnable() {
+            @Override
+            public void run() {
+                nowWeatherRl.getWidth(); // 获取宽度
+                RelativeLayout.LayoutParams linearParams =(RelativeLayout.LayoutParams) nowBg_iv.getLayoutParams(); //取控件textView当前的布局参数
+                linearParams.height = nowWeatherRl.getHeight(); // 获取高度
+                nowBg_iv.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                Log.i("sssddd",nowWeatherRl.getHeight()+"--");
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -203,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setTitle(city);
         tmp_tv.setText(tmp);
         Util.setWeatherIcon(weather_iv,weatherCode);
+        Util.setWeatherBg(nowBg_iv,weather);
 
 
 //                    prepareDataAnimation(weatherEntity);
@@ -217,8 +237,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextSwitcher pm25_tv;
     private ImageSwitcher weather_iv;
     private LineChartView lineChartView;
-    private TextView local_tv;
+    private RelativeLayout nowWeatherRl;
+    private ImageSwitcher nowBg_iv;
     private void initView(){
+        nowBg_iv = (ImageSwitcher) findViewById(R.id.nowBg_iv);
+        nowWeatherRl = (RelativeLayout) findViewById(R.id.nowWeather_rl);
         fragments = new ArrayList<>();
         fragments.add(new WeatherFragment("龙岗",handler));
         fragments.add(new WeatherFragment("盐田",handler));
@@ -238,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(pagerAdapter);
 
 
-        local_tv = (TextView) findViewById(R.id.location_tv);
         weather_iv = (ImageSwitcher) findViewById(R.id.weather_iv);
         weather_iv.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -306,10 +328,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lineChartView = (LineChartView) findViewById(R.id.line_chart);
 
     }
-
-
-
-
-
-
 }

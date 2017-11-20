@@ -516,4 +516,14 @@ public class Util {
             return true;
         }
     }
+
+    public static void setWeatherBg(ImageSwitcher nowBg_iv, String weather) {
+        int[] rainBgs = {R.drawable.rain_day,R.drawable.rain_day2,R.drawable.rain_day3,R.drawable.rain_day4,R.drawable.rain_night};
+        int[] snowBgs = {R.drawable.snow,R.drawable.snow2,R.drawable.snow3,R.drawable.snow_day,R.drawable.snow_day2,R.drawable.snow_night,R.drawable.snow_night2};
+        int[] qlBgs = {R.drawable.ql_night,R.drawable.ql_night2,R.drawable.sky_night_ql,R.drawable.sky};
+        int[] ray = {R.drawable.flash};
+        if("雨".equals(weather)){
+//            nowBg_iv.setImageResource();
+        }
+    }
 }

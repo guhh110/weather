@@ -62,13 +62,13 @@ public class LineChartHelper {
         Line line_TemperaAll = createLine(valueTemperaAll, Color.parseColor("#FFCD41"));
         line_TemperaAll.setHasPoints(true);
         Axis axisX = createX(strX);
-        Axis axisY = new Axis();
+//        Axis axisY = new Axis();
 
         List<Line> lines = new ArrayList<>();
         lines.add(line_TemperaAll);
 
         lineChartData = new LineChartData();
-        lineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
+//        lineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
         lineChartData.setAxisXBottom(axisX); //x 轴在底部
         lineChartData.setValueLabelBackgroundAuto(true);
         lineChartData.setLines(lines);
@@ -85,7 +85,7 @@ public class LineChartHelper {
         axisX.setHasTiltedLabels(false);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
         axisX.setTextColor(Color.WHITE);  //设置字体颜色
         //axisX.setName("date");  //表格名称
-        axisX.setTextSize(12);//设置字体大小
+        axisX.setTextSize(14);//设置字体大小
 //        axisX.setMaxLabelChars(3); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
         axisX.setValues(mAxisValues);  //填充X轴的坐标名称
         axisX.setHasLines(true); //x 轴分割线
@@ -104,10 +104,10 @@ public class LineChartHelper {
         axisX.setHasTiltedLabels(false);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
         axisX.setTextColor(Color.WHITE);  //设置字体颜色
         //axisX.setName("date");  //表格名称
-        axisX.setTextSize(12);//设置字体大小
+        axisX.setTextSize(14);//设置字体大小
 //        axisX.setMaxLabelChars(3); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
         axisX.setValues(mAxisValues);  //填充X轴的坐标名称
-        axisX.setHasLines(true); //x 轴分割线
+        axisX.setHasLines(false); //x 轴分割线
 
         return axisX;
     }
@@ -120,10 +120,10 @@ public class LineChartHelper {
         }
         Line line = new Line(pointValues).setColor(color);
         line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
-        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
+        line.setCubic(true);//曲线是否平滑，即是曲线还是折线
         line.setFilled(false);//是否填充曲线的面积
-        line.setHasLabels(false);//曲线的数据坐标是否加上备注
-        line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
+        line.setHasLabels(true);//曲线的数据坐标是否加上备注
+        line.setHasLabelsOnlyForSelected(false);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
         line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
         line.setStrokeWidth(2);

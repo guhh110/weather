@@ -9,9 +9,25 @@
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical">
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageSwitcher
+            android:scaleType="centerCrop"
+            android:id="@+id/nowBg_iv"
+            android:src="@drawable/snow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out"
+            />
+        <View
+            android:background="#52363333"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <!--android:background="#cc2b2929"-->
+    <RelativeLayout
         android:id="@+id/nowWeather_rl"
-        android:elevation="10dp"
-        android:background="#cc2b2929"
         android:paddingTop="50dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -25,14 +41,14 @@
             android:id="@+id/location_tv"
             android:textSize="18sp"
             android:layout_alignParentRight="true"
-            android:textColor="#fff"
+            android:textColor="@color/w"
             android:text="北京"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextSwitcher
             android:layout_marginTop="10dp"
             android:layout_below="@id/location_tv"
-            android:textColor="#fff"
+            android:textColor="@color/w"
             android:id="@+id/temperature_tv"
             android:textSize="60sp"
             android:layout_width="wrap_content"
@@ -53,7 +69,7 @@
             android:layout_height="wrap_content" />-->
         <TextView
             android:id="@+id/tv1"
-            android:textColor="#fff"
+            android:textColor="@color/w"
             android:layout_marginLeft="10dp"
             android:layout_alignBaseline="@id/temperature_tv"
             android:layout_toRightOf="@id/temperature_tv"
@@ -88,7 +104,7 @@
             android:fontFamily="casual"
             android:layout_marginTop="10dp"
             android:layout_below="@id/temperature_tv"
-            android:textColor="#fff"
+            android:textColor="@color/w"
             android:id="@+id/wind_tv"
             android:text="东北风 48°  微风 7km/h"
             android:layout_width="wrap_content"
@@ -114,7 +130,7 @@
                 <TextSwitcher
                     android:id="@+id/hum_tv"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
+                    android:textColor="@color/w"
                     android:text="80"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,7 +140,7 @@
                 <!--<TextView
                     android:layout_marginLeft="2dp"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
+                    android:textColor="@color/w"
                     android:text="%"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />-->
@@ -142,7 +158,7 @@
                 <TextSwitcher
                     android:id="@+id/fl_tv"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
+                    android:textColor="@color/w"
                     android:text="20℃"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -170,7 +186,7 @@
                 <TextSwitcher
                     android:id="@+id/pm25_tv"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
+                    android:textColor="@color/w"
                     android:text="250"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
