@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -240,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RelativeLayout nowWeatherRl;
     private ImageSwitcher nowBg_iv;
     private void initView(){
-        nowBg_iv = (ImageSwitcher) findViewById(R.id.nowBg_iv);
         nowWeatherRl = (RelativeLayout) findViewById(R.id.nowWeather_rl);
         fragments = new ArrayList<>();
         fragments.add(new WeatherFragment("龙岗",handler));
@@ -266,6 +266,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public View makeView() {
                 View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.imageview,null);
+                return view;
+            }
+        });
+        nowBg_iv = (ImageSwitcher) findViewById(R.id.nowBg_iv);
+        nowBg_iv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView view = (ImageView) LayoutInflater.from(getBaseContext()).inflate(R.layout.imageview,null);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+                view.setLayoutParams(layoutParams);
+                view.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 return view;
             }
         });
