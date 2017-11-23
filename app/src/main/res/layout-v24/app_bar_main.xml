@@ -7,8 +7,6 @@
     tools:context="guhh.com.weather.MainActivity"
     >
     <android.support.design.widget.AppBarLayout
-        android:layout_margin="0dp"
-        android:padding="0dp"
         android:id="@+id/appbar"
         android:background="#0000"
         android:layout_width="match_parent"
@@ -17,52 +15,38 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:paddingEnd="0dp"
-            android:padding="0dp"
-            app:paddingStart="0dp"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:titleEnabled="false"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
             <include layout="@layout/content_main"/>
-
             <android.support.v7.widget.Toolbar
                 app:layout_collapseMode="pin"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
                 app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                app:paddingStart="0dp"
-                android:paddingLeft="0dp"
-                app:contentInsetEndWithActions="0dp"
+                app:contentInsetEnd="0dp"
+                android:contentInsetEnd="0dp"
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetEndWithActions="0dp"
                 >
-
                 <RelativeLayout
-                    android:translationX="-20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                     <RelativeLayout
-                        android:layout_centerInParent="true"
                         android:id="@+id/nowWeather_rl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
                         >
-                        <TextSwitcher
-                            android:layout_marginTop="15dp"
-                            android:layout_alignParentRight="true"
-                            android:id="@+id/city_tv"
-                            android:text="龙岗"
-                            android:textColor="#fff"
-                            android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                            android:inAnimation="@anim/slide_in_up"
-                            android:outAnimation="@anim/slide_out_down"
-                            />
                         <TextView
                             android:visibility="gone"
                             android:id="@+id/location_tv"
@@ -74,7 +58,7 @@
                             android:layout_height="wrap_content" />
                         <TextSwitcher
                             android:layout_marginTop="10dp"
-                            android:layout_below="@id/city_tv"
+                            android:layout_below="@id/location_tv"
                             android:textColor="@color/w"
                             android:id="@+id/temperature_tv"
                             android:textSize="60sp"
@@ -316,12 +300,6 @@
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-        <ImageView
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/shadow"
-            android:alpha="0.9"
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

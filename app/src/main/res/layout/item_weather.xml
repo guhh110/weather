@@ -3,22 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="20dp"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:clickable="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:contentPadding="20dp"
-        app:cardBackgroundColor="#eb4e4c4c"
-        app:cardElevation="3dp">
+        <RelativeLayout
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="160dp">
 
         <RelativeLayout
+            android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@android:color/transparent">
-
+            android:background="#eb4e4c4c">
             <TextView
                 android:id="@+id/minTmp_tv"
                 android:layout_width="wrap_content"
@@ -236,5 +233,10 @@
                 android:textSize="16sp"
                  />
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+            <guhh.com.weather.CircleView
+                android:layout_marginLeft="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 </LinearLayout>

@@ -3,6 +3,7 @@ package guhh.com.weather;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -36,6 +37,10 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,15 +84,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         //begin------------------
         initView();
@@ -121,16 +127,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        nowWeatherRl.post(new Runnable() {
-            @Override
-            public void run() {
-                nowWeatherRl.getWidth(); // 获取宽度
-                RelativeLayout.LayoutParams linearParams =(RelativeLayout.LayoutParams) nowBg_iv.getLayoutParams(); //取控件textView当前的布局参数
-                linearParams.height = nowWeatherRl.getHeight(); // 获取高度
-                nowBg_iv.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-                Log.i("sssddd",nowWeatherRl.getHeight()+"--");
-            }
-        });
+//        nowWeatherRl.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                nowWeatherRl.getWidth(); // 获取宽度
+//                RelativeLayout.LayoutParams linearParams =(RelativeLayout.LayoutParams) nowBg_iv.getLayoutParams(); //取控件textView当前的布局参数
+//                linearParams.height = nowWeatherRl.getHeight(); // 获取高度
+//                nowBg_iv.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//                mbView.setLayoutParams(linearParams);
+//                Log.i("sssddd",nowWeatherRl.getHeight()+"--");
+//            }
+//        });
 
     }
 
@@ -220,7 +227,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         wind_tv.setText(wind);
         weather_tv.setText(weather);
         pm25_tv.setText(pm25);
-        toolbar.setTitle(city);
+//        getSupportActionBar().setTitle(city);
+        city_tv.setText(city);
+//        toolbar.setTitle(city);
+//        collapsingToolbarLayout.setTitle(city);
         tmp_tv.setText(tmp);
         Util.setWeatherIcon(weather_iv,weatherCode);
         Util.setWeatherBg(nowBg_iv,weather);
@@ -229,6 +239,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    prepareDataAnimation(weatherEntity);
         lineChartView.startDataAnimation();
     }
+
+//    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private TextSwitcher city_tv;
     private Toolbar toolbar;
     private TextSwitcher weather_tv;
     private TextSwitcher wind_tv;
@@ -240,12 +253,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LineChartView lineChartView;
     private RelativeLayout nowWeatherRl;
     private ImageSwitcher nowBg_iv;
+    private View mbView;
     private void initView(){
+        mbView = findViewById(R.id.mb);
+//        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
+//        collapsingToolbarLayout.setTitle("");
         nowWeatherRl = (RelativeLayout) findViewById(R.id.nowWeather_rl);
+
         fragments = new ArrayList<>();
         fragments.add(new WeatherFragment("龙岗",handler));
         fragments.add(new WeatherFragment("盐田",handler));
-        fragments.add(new WeatherFragment("北京",handler));
+        fragments.add(new WeatherFragment("信宜",handler));
         pagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -259,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
         viewPager = (ViewPager) findViewById(R.id.viewPage);
         viewPager.setAdapter(pagerAdapter);
-
 
         weather_iv = (ImageSwitcher) findViewById(R.id.weather_iv);
         weather_iv.setFactory(new ViewSwitcher.ViewFactory() {
@@ -287,6 +304,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
                 view.setText("多云");
                 view.setTextSize(18);
+                return view;
+            }
+        });
+
+        city_tv = (TextSwitcher) findViewById(R.id.city_tv);
+        city_tv.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView view = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.textview,null);
+                view.setTextSize(22);
                 return view;
             }
         });

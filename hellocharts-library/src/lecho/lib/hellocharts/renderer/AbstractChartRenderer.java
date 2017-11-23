@@ -8,6 +8,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import lecho.lib.hellocharts.computator.ChartComputator;
 import lecho.lib.hellocharts.model.ChartData;
@@ -113,14 +114,12 @@ public abstract class AbstractChartRenderer implements ChartRenderer {
             }
 
             canvas.drawRect(labelBackgroundRect, labelBackgroundPaint);
-
             textX = labelBackgroundRect.left + labelMargin;
             textY = labelBackgroundRect.bottom - labelMargin;
         } else {
             textX = labelBackgroundRect.left;
             textY = labelBackgroundRect.bottom;
         }
-
         canvas.drawText(labelBuffer, startIndex, numChars, textX, textY, labelPaint);
     }
 

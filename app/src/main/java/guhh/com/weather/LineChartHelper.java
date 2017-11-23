@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 import entity.Hourly_forecast;
+import lecho.lib.hellocharts.formatter.AxisValueFormatter;
+import lecho.lib.hellocharts.formatter.LineChartValueFormatter;
+import lecho.lib.hellocharts.formatter.SimpleLineChartValueFormatter;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -70,7 +73,9 @@ public class LineChartHelper {
         lineChartData = new LineChartData();
 //        lineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
         lineChartData.setAxisXBottom(axisX); //x 轴在底部
+        lineChartData.setValueLabelBackgroundEnabled(false);
         lineChartData.setValueLabelBackgroundAuto(true);
+        lineChartData.setValueLabelTextSize(16);
         lineChartData.setLines(lines);
     }
 
@@ -127,6 +132,7 @@ public class LineChartHelper {
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
         line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
         line.setStrokeWidth(2);
+        line.setPointRadius(5);
         return line;
     }
 

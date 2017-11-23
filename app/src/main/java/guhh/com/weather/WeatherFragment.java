@@ -89,11 +89,18 @@ public class WeatherFragment extends Fragment {
                     WeatherEntity weatherEntity = JSON.parseObject(response.body(),WeatherEntity.class);
                     if(weatherEntity == null){
                         Toast.makeText(getContext(),"获取天气失败！",Toast.LENGTH_SHORT).show();
+                        myAdapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.empty,null));
                         return;
                     }
                     HeWeather5 heWeather5 = weatherEntity.getResult().getHeWeather5().get(0);
+                    if(!"ok".equals(heWeather5.getStatus())){
+                        Toast.makeText(getContext(),"获取天气失败！",Toast.LENGTH_SHORT).show();
+                        myAdapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.empty,null));
+                        return;
+                    }
+                    Log.i("sssddd1",heWeather5.getStatus());
                     dayWeathers.addAll(heWeather5.getDaily_forecast());
-                    Toast.makeText(getContext(),dayWeathers.size()+"-",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(),dayWeathers.size()+"-",Toast.LENGTH_SHORT).show();
                     myAdapter.notifyDataSetChanged();
 
                     String city = heWeather5.getBasic().getCity();
