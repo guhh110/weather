@@ -3,6 +3,7 @@ package seivice;
 import android.util.Log;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -554,4 +555,70 @@ public class Util {
             nowBg_iv.setImageResource(yt[index]);
         }
     }
+
+    public static void setWeatherBg(ImageView nowBg_iv, String weather) {
+        if(nowBg_iv == null){
+            Log.e("sssddd","nowBg_iv为空！");
+            return;
+        }
+
+        int[] rainBgs = {R.drawable.rain_day,R.drawable.rain_day2,R.drawable.rain_day3,R.drawable.rain_day4,R.drawable.rain_night};
+        int[] snowBgs = {R.drawable.snow,R.drawable.snow2,R.drawable.snow3,R.drawable.snow_day,R.drawable.snow_day2,R.drawable.snow_night,R.drawable.snow_night2};
+        int[] qlBgs = {R.drawable.ql_night,R.drawable.ql_night2,R.drawable.sky_night_ql,R.drawable.sky};
+        int[] ray = {R.drawable.flash,R.drawable.flash1,R.drawable.flash3,R.drawable.lightning};
+        int[] wu = {R.drawable.fog,R.drawable.fog2,R.drawable.fog4,R.drawable.france};
+        int[] mai = {R.drawable.fog3,R.drawable.fog5};
+        int[] clouds = {R.drawable.clouds_night,R.drawable.dy,R.drawable.dy3,R.drawable.sky_day_dy};
+        int[] yt = {R.drawable.sky_day_yt,R.drawable.yt};
+
+        Random random = new Random();
+        if(weather.contains("雨")){
+            nowBg_iv.setImageResource(rainBgs[random.nextInt(rainBgs.length)]);
+        }else if (weather.contains("晴")){
+            nowBg_iv.setImageResource(qlBgs[random.nextInt(qlBgs.length)]);
+        }else if(weather.contains("雪")){
+            nowBg_iv.setImageResource(snowBgs[random.nextInt(snowBgs.length)]);
+        }else if(weather.contains("雷")){
+            nowBg_iv.setImageResource(ray[random.nextInt(ray.length)]);
+        }else if(weather.contains("雾")){
+            nowBg_iv.setImageResource(wu[random.nextInt(wu.length)]);
+        }else if(weather.contains("霾")){
+            nowBg_iv.setImageResource(mai[random.nextInt(mai.length)]);
+        }else if(weather.contains("云")){
+            nowBg_iv.setImageResource(clouds[random.nextInt(clouds.length)]);
+        }else if(weather.contains("阴")){
+            int index = random.nextInt(yt.length);
+            Log.i("sssddd",nowBg_iv+"-"+yt+"-"+index);
+            nowBg_iv.setImageResource(yt[index]);
+        }
+    }
+
+    public static void setSuggestionName(TextView textView,ImageView imageView,String name){
+        if(name.equals("cw")){
+            textView.setText("洗车");
+            imageView.setImageResource(R.mipmap.cw);
+        }else if(name.equals("air")){
+            textView.setText("空气质量");
+            imageView.setImageResource(R.mipmap.air);
+        }else if(name.equals("uv")){
+            textView.setText("紫外线");
+            imageView.setImageResource(R.mipmap.uv);
+        }else if(name.equals("drsg")){
+            textView.setText("穿衣");
+            imageView.setImageResource(R.mipmap.yf);
+        }else if(name.equals("flu")){
+            textView.setText("感冒");
+            imageView.setImageResource(R.mipmap.flu);
+        }else if(name.equals("trav")){
+            textView.setText("旅游");
+            imageView.setImageResource(R.mipmap.trav);
+        }else if(name.equals("sport")) {
+            textView.setText("运动");
+            imageView.setImageResource(R.mipmap.sport);
+        }else if(name.equals("comf")) {
+            textView.setText("舒适度");
+            imageView.setImageResource(R.mipmap.comf);
+        }
+    }
+
 }

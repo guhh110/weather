@@ -1,6 +1,7 @@
 package guhh.com.weather;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,8 @@ import android.icu.util.Measure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import static android.R.attr.path;
 
 /**
  * Created by guhh on 2017/11/23.
@@ -25,9 +28,10 @@ public class CircleView extends View {
 
     public CircleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
         paint = new Paint();
         paint.setAntiAlias(true);
-
+        paint.setDither(true);
     }
 
     @Override
@@ -45,21 +49,29 @@ public class CircleView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        int centerPointX = width/2;
+        int centerPointY = height/2;
+
+        float bigCircleRadius = width/2f;
+        float smallCircleRadius = bigCircleRadius-3;
+
+        float circlePointX = width/2f;
+        float circlePointY = bigCircleRadius;
         Path path = new Path();
-        path.addCircle(width/2,height/2,30, Path.Direction.CW);
+        path.addCircle(circlePointX,circlePointY,bigCircleRadius, Path.Direction.CW);
 
         Path path1 = new Path();
-        path1.addCircle(width/2,height/2,10, Path.Direction.CW);
+        path1.addCircle(circlePointX,circlePointY,smallCircleRadius, Path.Direction.CW);
 
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.WHITE);
        canvas.drawPath(path,paint);
 
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.parseColor("#393939"));
+        paint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         canvas.drawPath(path1,paint);
 
-        paint.setColor(Color.BLACK);                    //设置画笔颜色
         paint.setStrokeWidth((float) 3.0);              //设置线宽
-        canvas.drawLine(width/2, height/2, width/2, height+10, paint);
+        canvas.drawLine(circlePointX,circlePointY, circlePointX, height, paint);
 
     }
 }

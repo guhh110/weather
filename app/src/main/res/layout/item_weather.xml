@@ -3,240 +3,285 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:orientation="vertical">
 
-        <RelativeLayout
-            android:background="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="160dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="204dp">
 
-        <RelativeLayout
-            android:padding="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="#eb4e4c4c">
-            <TextView
-                android:id="@+id/minTmp_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="13"
-                android:textColor="#fff"
-                android:textSize="30sp" />
-            <TextView
-                android:layout_marginLeft="5dp"
-                android:id="@+id/tv5"
-                android:layout_toRightOf="@id/minTmp_tv"
-                android:layout_alignBaseline="@id/minTmp_tv"
-                android:textColor="#fff"
-                android:text="℃"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/tv5"
-                android:text="~"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/maxTmp_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/tv2"
-                android:text="20"
-                android:textColor="#fff"
-                android:textSize="30sp" />
-            <TextView
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/maxTmp_tv"
-                android:layout_alignBaseline="@id/maxTmp_tv"
-                android:textColor="#fff"
-                android:text="℃"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/iv3"
-                android:padding="2dp"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_below="@id/minTmp_tv"
-                android:layout_marginTop="5dp"
-                android:src="@mipmap/hum_item" />
-
-            <TextView
-                android:id="@+id/tv1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/minTmp_tv"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/iv3"
-                android:text="湿度："
-                android:textColor="#fff" />
-
-            <TextView
-                android:id="@+id/hum_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/tv1"
-                android:layout_toRightOf="@id/tv1"
-                android:text="57%"
-                android:textColor="#fff"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/iv1"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_below="@id/tv1"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/ss" />
-
-            <TextView
-                android:id="@+id/tv3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv1"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/iv1"
-                android:text="日出："
-                android:textColor="#fff" />
-
-            <TextView
-                android:id="@+id/ss_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/tv3"
-                android:layout_toRightOf="@id/tv3"
-                android:text="15:00"
-                android:textColor="#fff" />
-
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:id="@+id/iv2"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_toRightOf="@id/ss_tv"
-                android:layout_below="@id/tv1"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/sd1" />
-
-            <TextView
-                android:id="@+id/tv4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv1"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/iv2"
-                android:text="日落："
-                android:textColor="#fff" />
-
-            <TextView
-                android:id="@+id/sd_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/tv4"
-                android:layout_toRightOf="@id/tv4"
-                android:text="15:00"
-                android:textColor="#fff" />
-            <ImageView
-                android:layout_below="@id/tv4"
-                android:id="@+id/iv4"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/wind" />
-            <TextView
-                android:layout_toRightOf="@id/iv4"
-                android:id="@+id/wind_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv4"
-                android:layout_marginTop="15dp"
-                android:text="无持续风向  微风  5km/h"
-                android:textColor="#fff" />
-
-            <LinearLayout
-                android:id="@+id/day_ll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-
+            <RelativeLayout
+                android:layout_marginTop="11dp"
+                android:layout_height="182dp"
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                >
+                <guhh.com.weather.RoundImageView
+                    android:visibility="visible"
+                    android:id="@+id/itemBg_iv"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/snow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
                 <TextView
-                    android:id="@+id/dayWeather_tv"
+                    android:visibility="visible"
+                    android:background="@drawable/radius_bg_alpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/minTmp_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="晴间多云"
+                    android:text="13"
+                    android:textColor="#fff"
+                    android:textSize="30sp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv5"
+                    android:layout_toRightOf="@id/minTmp_tv"
+                    android:layout_alignBaseline="@id/minTmp_tv"
+                    android:textColor="#fff"
+                    android:text="℃"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/tv5"
+                    android:text="~"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/maxTmp_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/tv2"
+                    android:text="20"
+                    android:textColor="#fff"
+                    android:textSize="30sp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/maxTmp_tv"
+                    android:layout_alignBaseline="@id/maxTmp_tv"
+                    android:textColor="#fff"
+                    android:text="℃"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/iv3"
+                    android:padding="2dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@id/minTmp_tv"
+                    android:layout_marginTop="5dp"
+                    android:src="@mipmap/hum_item" />
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/minTmp_tv"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@id/iv3"
+                    android:text="湿度："
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/hum_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/tv1"
+                    android:layout_toRightOf="@id/tv1"
+                    android:text="57%"
                     android:textColor="#fff"
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:id="@+id/dayIcon_iv"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@mipmap/cloudy4" />
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/iv1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@id/tv1"
+                    android:layout_marginTop="10dp"
+                    android:src="@mipmap/ss" />
 
                 <TextView
+                    android:id="@+id/tv3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日"
-                    android:textColor="#fff"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:id="@+id/night_ll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/day_ll">
+                    android:layout_below="@id/tv1"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@id/iv1"
+                    android:text="日出："
+                    android:textColor="#fff" />
 
                 <TextView
-                    android:id="@+id/nightWeather_tv"
+                    android:id="@+id/ss_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="大雨"
-                    android:textColor="#fff"
-                    android:textSize="16sp" />
+                    android:layout_alignBaseline="@id/tv3"
+                    android:layout_toRightOf="@id/tv3"
+                    android:text="15:00"
+                    android:textColor="#fff" />
 
                 <ImageView
-                    android:id="@+id/nightIcon_iv"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@mipmap/shower3" />
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/iv2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_toRightOf="@id/ss_tv"
+                    android:layout_below="@id/tv1"
+                    android:layout_marginTop="10dp"
+                    android:src="@mipmap/sd1" />
 
                 <TextView
+                    android:id="@+id/tv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="夜"
-                    android:textColor="#fff"
-                    android:textSize="10sp" />
-            </LinearLayout>
+                    android:layout_below="@id/tv1"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@id/iv2"
+                    android:text="日落："
+                    android:textColor="#fff" />
 
-            <TextView
-                android:id="@+id/date_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:text="2017-10-26"
-                android:textColor="#fff"
-                android:textSize="16sp"
-                 />
-        </RelativeLayout>
-            <guhh.com.weather.CircleView
-                android:layout_marginLeft="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/sd_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/tv4"
+                    android:layout_toRightOf="@id/tv4"
+                    android:text="15:00"
+                    android:textColor="#fff" />
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_below="@id/tv4"
+                    android:id="@+id/iv4"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@mipmap/wind" />
+                <TextView
+                    android:layout_toRightOf="@id/iv4"
+                    android:id="@+id/wind_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv4"
+                    android:layout_marginTop="15dp"
+                    android:text="无持续风向  微风  5km/h"
+                    android:textColor="#fff" />
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/day_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+
+                    <TextView
+                        android:id="@+id/dayWeather_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="晴间多云"
+                        android:textColor="#fff"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/dayIcon_iv"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@mipmap/cloudy4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="日"
+                        android:textColor="#fff"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/night_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/day_ll">
+
+                    <TextView
+                        android:id="@+id/nightWeather_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="大雨"
+                        android:textColor="#fff"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/nightIcon_iv"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@mipmap/shower3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="夜"
+                        android:textColor="#fff"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:text="2017-10-26"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    />
+            </RelativeLayout>
+        <guhh.com.weather.CircleView
+            android:rotation="180"
+            android:layout_marginLeft="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_width="15dp"
+            android:layout_height="24dp" />
+        <guhh.com.weather.CircleView
+            android:layout_marginLeft="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="15dp"
+            android:layout_height="24dp" />
+        <!--<guhh.com.weather.CircleView
+            android:rotation="180"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_width="15dp"
+            android:layout_height="24dp" />
+        <guhh.com.weather.CircleView
+            android:layout_marginLeft="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="15dp"
+            android:layout_height="24dp" />-->
+    </RelativeLayout>
 </LinearLayout>
