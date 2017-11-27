@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="310dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="guhh.com.weather.MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp">
+        android:layout_height="match_parent">
         <ImageSwitcher
             app:layout_collapseMode="parallax"
             android:scaleType="centerCrop"

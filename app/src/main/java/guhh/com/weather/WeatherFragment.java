@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.transition.Visibility;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -302,6 +303,10 @@ public class WeatherFragment extends Fragment {
                     setViewDataSuggestion(helper,item.getObject());
                     break;
 
+            }
+            if(helper.getAdapterPosition() == rlData.size()-1){
+                helper.setVisible(R.id.cv1,false);
+                helper.setVisible(R.id.cv2,false);
             }
         }
 

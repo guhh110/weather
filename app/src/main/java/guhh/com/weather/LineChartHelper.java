@@ -75,7 +75,7 @@ public class LineChartHelper {
         lineChartData.setAxisXBottom(axisX); //x 轴在底部
         lineChartData.setValueLabelBackgroundEnabled(false);
         lineChartData.setValueLabelBackgroundAuto(true);
-        lineChartData.setValueLabelTextSize(16);
+        lineChartData.setValueLabelTextSize(12);
         lineChartData.setLines(lines);
     }
 
@@ -90,7 +90,7 @@ public class LineChartHelper {
         axisX.setHasTiltedLabels(false);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
         axisX.setTextColor(Color.WHITE);  //设置字体颜色
         //axisX.setName("date");  //表格名称
-        axisX.setTextSize(14);//设置字体大小
+        axisX.setTextSize(12);//设置字体大小
 //        axisX.setMaxLabelChars(3); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
         axisX.setValues(mAxisValues);  //填充X轴的坐标名称
         axisX.setHasLines(true); //x 轴分割线

@@ -53,7 +53,7 @@ public class CircleView extends View {
         int centerPointY = height/2;
 
         float bigCircleRadius = width/2f;
-        float smallCircleRadius = bigCircleRadius-3;
+        float smallCircleRadius = width/3f;
 
         float circlePointX = width/2f;
         float circlePointY = bigCircleRadius;
@@ -70,7 +70,7 @@ public class CircleView extends View {
         paint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         canvas.drawPath(path1,paint);
 
-        paint.setStrokeWidth((float) 3.0);              //设置线宽
+        paint.setStrokeWidth((float) 5.0);              //设置线宽
         canvas.drawLine(circlePointX,circlePointY, circlePointX, height, paint);
 
     }
