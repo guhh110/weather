@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
     <RelativeLayout
+        android:background="@drawable/shadow_9583"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:background="@drawable/radius_bg_alpha"
         android:layout_margin="10dp"
         android:paddingTop="25dp"
         android:paddingBottom="25dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:background="@drawable/radius_bg_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -56,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
-
+    </RelativeLayout>
     <guhh.com.weather.CircleView
         android:rotation="180"
         android:layout_marginLeft="40dp"
@@ -84,4 +90,5 @@
         android:layout_alignParentBottom="true"
         android:layout_width="15dp"
         android:layout_height="30dp" />
+
 </RelativeLayout>

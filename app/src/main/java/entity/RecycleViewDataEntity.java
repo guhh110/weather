@@ -12,6 +12,7 @@ public class RecycleViewDataEntity implements MultiItemEntity{
 
 
     private Object object;
+    private int index;
     @Override
     public int getItemType() {
         if(object instanceof Daily_forecast){
@@ -22,6 +23,14 @@ public class RecycleViewDataEntity implements MultiItemEntity{
             return -1;
         }
 
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public Object getObject() {

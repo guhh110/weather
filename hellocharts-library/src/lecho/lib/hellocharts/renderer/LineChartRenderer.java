@@ -12,6 +12,7 @@ import android.graphics.PathEffect;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.util.Log;
 
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
@@ -228,11 +229,10 @@ public class LineChartRenderer extends AbstractChartRenderer {
             } else {
                 path.lineTo(rawX, rawY);
             }
-
             if(valueIndex == line.spIndex){
                 canvas.drawPath(path, linePaint);
-                path.reset();
-                path.moveTo(rawX, rawY);
+//                path.reset();
+//                path.moveTo(rawX, rawY);
                 linePaint.setPathEffect(line.spPathEffect);
             }
 
@@ -271,6 +271,15 @@ public class LineChartRenderer extends AbstractChartRenderer {
             }
 
             previousRawY = rawY;
+
+            if(valueIndex == line.spIndex){
+                canvas.drawPath(path, linePaint);
+//                path.reset();
+//                path.moveTo(rawX, rawY);
+                linePaint.setPathEffect(line.spPathEffect);
+            }
+
+            ++valueIndex;
 
             ++valueIndex;
 
@@ -361,6 +370,15 @@ public class LineChartRenderer extends AbstractChartRenderer {
             previousPointY = currentPointY;
             currentPointX = nextPointX;
             currentPointY = nextPointY;
+
+            if(valueIndex == line.spIndex){
+                canvas.drawPath(path, linePaint);
+//                path.reset();
+//                path.moveTo(currentPointX, currentPointY);
+                linePaint.setPathEffect(line.spPathEffect);
+            }
+
+            ++valueIndex;
         }
 
         canvas.drawPath(path, linePaint);

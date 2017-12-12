@@ -57,18 +57,28 @@ import seivice.Util;
  */
 
 public class WeatherFragment extends Fragment {
+    private int index;
     private Handler handler;
     private String city;
     private View view;
     private List<Daily_forecast> dayWeathers;
     private List<SuggestionEntity> suggestions;
     private List<RecycleViewDataEntity> rlData;
+    private String url;
 
     private WeatherFragment(){}
 
-    public WeatherFragment(String city,Handler handler){
+    public WeatherFragment(String city,Handler handler,int index){
+        this.index = index;
         this.city = city;
         this.handler = handler;
+        url = "https://way.jd.com/he/freeweather?city="+city+"&appkey="+UserData.apkKey;
+    }
+
+    public WeatherFragment(double latitude,double longitude,Handler handler,int index){
+        this.index = index;
+        this.handler = handler;
+        url = "https://way.jd.com/he/freeweather?city="+latitude+","+longitude+"&appkey="+UserData.apkKey;
     }
 
     @Override
@@ -94,7 +104,6 @@ public class WeatherFragment extends Fragment {
     }
 
     private void refreshWeather(){
-        String url = "https://way.jd.com/he/freeweather?city="+city+"&appkey="+UserData.apkKey;
 //        String url = "http://192.168.15.188:8080/ImagePage/weather";
         OkGo.<String>get(url).tag(this).execute(new StringCallback(){
 
@@ -124,7 +133,10 @@ public class WeatherFragment extends Fragment {
 
                     String city = heWeather5.getBasic().getCity();
                     Message message = new Message();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("index",index);
                     message.obj = weatherEntity;
+                    message.setData(bundle);
                     message.what = MainActivity.GET_WEATHER_DONE;
                     handler.sendMessage(message);
 
@@ -148,8 +160,10 @@ public class WeatherFragment extends Fragment {
 
     private void progressRlDataOfDayWeather(List<Daily_forecast> dayWeathers) {
         rlData.clear();
-        for (Daily_forecast df:dayWeathers) {
+        for (int i = 0;i<dayWeathers.size();i++) {
+            Daily_forecast df = dayWeathers.get(i);
             RecycleViewDataEntity r = new RecycleViewDataEntity();
+            r.setIndex(i);
             r.setObject(df);
             rlData.add(r);
         }
@@ -157,8 +171,10 @@ public class WeatherFragment extends Fragment {
 
     private void progressRlDataOfSuggestion(List<SuggestionEntity> suggestionEntities) {
         rlData.clear();
-        for (SuggestionEntity sge:suggestionEntities) {
+        for (int i = 0;i<suggestionEntities.size();i++) {
+            SuggestionEntity sge = suggestionEntities.get(i);
             RecycleViewDataEntity r = new RecycleViewDataEntity();
+            r.setIndex(i);
             r.setObject(sge);
             rlData.add(r);
         }
@@ -304,9 +320,13 @@ public class WeatherFragment extends Fragment {
                     break;
 
             }
-            if(helper.getAdapterPosition() == rlData.size()-1){
+            if(item.getIndex() == rlData.size()-1){
+                Log.i("sssddd1",helper.getAdapterPosition()+"-"+helper.getLayoutPosition()+"-"+helper.getOldPosition()+"-");
                 helper.setVisible(R.id.cv1,false);
                 helper.setVisible(R.id.cv2,false);
+            }else{
+                helper.setVisible(R.id.cv1,true);
+                helper.setVisible(R.id.cv2,true);
             }
         }
 
@@ -352,5 +372,9 @@ public class WeatherFragment extends Fragment {
 
     public String getCity() {
         return city;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

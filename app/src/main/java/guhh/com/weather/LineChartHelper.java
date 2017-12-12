@@ -125,7 +125,7 @@ public class LineChartHelper {
         }
         Line line = new Line(pointValues).setColor(color);
         line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
-        line.setCubic(true);//曲线是否平滑，即是曲线还是折线
+        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
         line.setFilled(false);//是否填充曲线的面积
         line.setHasLabels(true);//曲线的数据坐标是否加上备注
         line.setHasLabelsOnlyForSelected(false);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
@@ -142,7 +142,6 @@ public class LineChartHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
         String nowDate = sdf.format(new Date());
         Line line = lineChartData.getLines().get(0);
-
         if(hourly_forecasts == null || line == null)
             return;
         ArrayList<String> xLabel = new ArrayList<>();
@@ -155,7 +154,7 @@ public class LineChartHelper {
             if(!date.contains(nowDate) && re == 0){
                 re =1;
                 line.spIndex = i;
-                Log.i("sssddd",i+"-----");
+                Log.i("sssddd11",i+"-----");
             }
 
             if(tmp>max)

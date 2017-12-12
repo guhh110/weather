@@ -1,8 +1,11 @@
 package guhh.com.weather;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -34,6 +37,10 @@ import android.widget.ViewSwitcher;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -46,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.jar.Manifest;
 
 import entity.HeWeather5;
 import entity.Hourly_forecast;
@@ -55,9 +63,15 @@ import lecho.lib.hellocharts.view.LineChartView;
 import seivice.Util;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private final int READ_PHONE_STATE_CODE = 100;
+    private final int ACCESS_COARSE_LOCATION_CODE = 101;
+    private final int ACCESS_FINE_LOCATION_CODE = 102;
+    private final int READ_EXTERNAL_STORAGE_CODE = 103;
+    private final int WRITE_EXTERNAL_STORAGE_CODE = 104;
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+
     public final static int GET_WEATHER_DONE = 1;
-
-
     private ViewPager viewPager;
     private ArrayList<WeatherFragment> fragments;
     private PagerAdapter pagerAdapter;
@@ -67,10 +81,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void handleMessage(Message msg) {
             int what = msg.what;
             WeatherEntity weatherEntity = (WeatherEntity) msg.obj;
+            int index = msg.getData().getInt("index");
             switch (what){
                 case GET_WEATHER_DONE:
                     String city = weatherEntity.getResult().getHeWeather5().get(0).getBasic().getCity();
-                    if(fragments.get(viewPager.getCurrentItem()).getCity().equals(city)){
+                    if(viewPager.getCurrentItem() == index){
                         setDataInView(weatherEntity);
                     }
                     break;
@@ -85,19 +100,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
 //
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+////        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+////        drawer.addDrawerListener(toggle);
+////
+////
+////        toggle.syncState();
 //
-//        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         //begin------------------
         initView();
+        checkPermission();
+        getLocation();
         lineChartHelper = new LineChartHelper(lineChartView);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -122,8 +139,133 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void getLocation() {
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
 
+        LocationClientOption option = new LocationClientOption();
 
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+//可选，设置定位模式，默认高精度
+//LocationMode.Hight_Accuracy：高精度；
+//LocationMode. Battery_Saving：低功耗；
+//LocationMode. Device_Sensors：仅使用设备；
+
+        option.setCoorType("bd09ll");
+//可选，设置返回经纬度坐标类型，默认gcj02
+//gcj02：国测局坐标；
+//bd09ll：百度经纬度坐标；
+//bd09：百度墨卡托坐标；
+//海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
+
+        option.setScanSpan(1000);
+//可选，设置发起定位请求的间隔，int类型，单位ms
+//如果设置为0，则代表单次定位，即仅定位一次，默认为0
+//如果设置非0，需设置1000ms以上才有效
+
+        option.setOpenGps(true);
+//可选，设置是否使用gps，默认false
+//使用高精度和仅用设备两种定位模式的，参数必须设置为true
+
+        option.setLocationNotify(true);
+//可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
+
+        option.setIgnoreKillProcess(false);
+//可选，定位SDK内部是一个service，并放到了独立进程。
+//设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
+
+        option.SetIgnoreCacheException(false);
+//可选，设置是否收集Crash信息，默认收集，即参数为false
+
+        option.setWifiCacheTimeOut(5*60*1000);
+//可选，7.2版本新增能力
+//如果设置了该接口，首次启动定位时，会先判断当前WiFi是否超出有效期，若超出有效期，会先重新扫描WiFi，然后定位
+
+        option.setEnableSimulateGps(false);
+//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
+
+        mLocationClient.setLocOption(option);
+//mLocationClient为第二步初始化过的LocationClient对象
+//需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+//更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+
+        mLocationClient.start();
+//mLocationClient为第二步初始化过的LocationClient对象
+//调用LocationClient的start()方法，便可发起定位请求
+    }
+
+    private void checkPermission(){
+        int temp = 0;
+        String[] permissions = new String[]{android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION
+        ,android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(checkCallingOrSelfPermission(android.Manifest.permission.READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED){
+            temp++;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions,READ_PHONE_STATE_CODE);
+            }
+        }
+        if(checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+            temp++;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions,ACCESS_COARSE_LOCATION_CODE);
+            }
+        }
+        if(checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+            temp++;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions,ACCESS_FINE_LOCATION_CODE);
+            }
+        }
+        if(checkCallingOrSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            temp++;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions,READ_EXTERNAL_STORAGE_CODE);
+            }
+        }
+        if(checkCallingOrSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            temp++;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions,WRITE_EXTERNAL_STORAGE_CODE);
+            }
+        }
+
+        if(temp >= 0){
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && mLocationClient !=null){
+            mLocationClient.restart();
+        }
+        if(grantResults.length<=0)
+            return;
+        switch (requestCode){
+            case READ_PHONE_STATE_CODE:
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+            case READ_EXTERNAL_STORAGE_CODE:
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+            case WRITE_EXTERNAL_STORAGE_CODE:
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+            case ACCESS_COARSE_LOCATION_CODE:
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+            case ACCESS_FINE_LOCATION_CODE:
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -241,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lineChartView.startDataAnimation();
     }
 
-//    private CollapsingToolbarLayout collapsingToolbarLayout;
+    //    private CollapsingToolbarLayout collapsingToolbarLayout;
     private TextSwitcher city_tv;
     private Toolbar toolbar;
     private TextSwitcher weather_tv;
@@ -262,9 +404,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nowWeatherRl = (RelativeLayout) findViewById(R.id.nowWeather_rl);
 
         fragments = new ArrayList<>();
-        fragments.add(new WeatherFragment("龙岗",handler));
-        fragments.add(new WeatherFragment("盐田",handler));
-        fragments.add(new WeatherFragment("重庆",handler));
         pagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -365,6 +504,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         //折线图
         lineChartView = (LineChartView) findViewById(R.id.line_chart);
+    }
+    class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取经纬度相关（常用）的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
 
+            double latitude = location.getLatitude();    //获取纬度信息
+            double longitude = location.getLongitude();    //获取经度信息
+            float radius = location.getRadius();    //获取定位精度，默认值为0.0f
+
+            String coorType = location.getCoorType();
+            //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
+
+            int errorCode = location.getLocType();
+            //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
+            Log.i("sssddd11",errorCode+"--");
+            if(errorCode == 61 || errorCode == 161){
+                fragments.add(new WeatherFragment(latitude,longitude,handler,fragments.size()));
+                pagerAdapter.notifyDataSetChanged();
+                mLocationClient.unRegisterLocationListener(this);
+            }
+        }
     }
 }
