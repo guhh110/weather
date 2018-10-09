@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eee"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <com.guhh.weatherviewdemo.WeatherRelativeLayout
+        app:sunHeight="80dp"
+        app:sunWidth="80dp"
+        app:cloudCount="10"
+        app:rainCount="0"
+        app:thunderCount="0"
+        app:cloudStartPosition="30dp"
+        app:cloudEndPosition="70dp"
+        app:cloudMaxSize="50dp"
+        app:cloudMinSize="30dp"
+        app:cloudMaxSpeed="10"
+        app:cloudMinSpeed="7"
+        android:background="#6cf"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" >
+
+    </com.guhh.weatherviewdemo.WeatherRelativeLayout>
+    <com.guhh.weatherviewdemo.WeatherRelativeLayout
+        app:sunHeight="0dp"
+        app:sunWidth="0dp"
+        app:cloudCount="0"
+        app:cloudStartPosition="-100dp"
+        app:cloudEndPosition="30dp"
+        app:cloudMaxSize="150dp"
+        app:cloudMinSize="100dp"
+        app:cloudMaxSpeed="10"
+        app:cloudMinSpeed="7"
+        android:layout_marginTop="10dp"
+        android:background="#6cf"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" >
+        <TextView
+            android:text="sadfsdfk"
+            android:textSize="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.guhh.weatherviewdemo.WeatherRelativeLayout>
+
+    <!--<com.guhh.weatherviewdemo.RainViewForSurfaceView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp" />-->
+</LinearLayout>

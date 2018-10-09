@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CloudRelativeLayout">
+        <attr name="sunHeight" format="dimension"/>
+        <attr name="sunWidth" format="dimension"/>
+        <attr name="cloudCount" format="integer"/>
+        <attr name="rainCount" format="integer"/>
+        <attr name="thunderCount" format="integer"/>
+        <attr name="cloudMaxSpeed" format="integer"/>
+        <attr name="cloudMinSpeed" format="integer"/>
+        <attr name="cloudMaxSize" format="dimension"/>
+        <attr name="cloudMinSize" format="dimension"/>
+        <attr name="cloudStartPosition" format="dimension"/>
+        <attr name="cloudEndPosition" format="dimension"/>
+    </declare-styleable>
+
+</resources>

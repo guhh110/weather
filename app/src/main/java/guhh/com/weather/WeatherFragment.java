@@ -1,5 +1,6 @@
 package guhh.com.weather;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -66,16 +67,18 @@ public class WeatherFragment extends Fragment {
     private List<RecycleViewDataEntity> rlData;
     private String url;
 
-    private WeatherFragment(){}
+    public WeatherFragment(){}
 
-    public WeatherFragment(String city,Handler handler,int index){
+    @SuppressLint("ValidFragment")
+    public WeatherFragment(String city, Handler handler, int index){
         this.index = index;
         this.city = city;
         this.handler = handler;
         url = "https://way.jd.com/he/freeweather?city="+city+"&appkey="+UserData.apkKey;
     }
 
-    public WeatherFragment(double latitude,double longitude,Handler handler,int index){
+    @SuppressLint("ValidFragment")
+    public WeatherFragment(double latitude, double longitude, Handler handler, int index){
         this.index = index;
         this.handler = handler;
         url = "https://way.jd.com/he/freeweather?city="+latitude+","+longitude+"&appkey="+UserData.apkKey;
@@ -366,7 +369,7 @@ public class WeatherFragment extends Fragment {
             Util.setWeatherIcon((ImageView) helper.getView(R.id.nightIcon_iv),nightCode);
             helper.setText(R.id.minTmp_tv,minTmp);
             helper.setText(R.id.date_tv,date);
-            Util.setWeatherBg((ImageView) helper.getView(R.id.itemBg_iv),dayWeather);
+//            Util.setWeatherBg((ImageView) helper.getView(R.id.itemBg_iv),dayWeather);
         }
     }
 
